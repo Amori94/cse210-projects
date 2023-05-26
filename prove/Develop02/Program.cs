@@ -6,6 +6,7 @@ class Program
     static void Main(string[] args)
     {
         string date = GetDate();
+        int i = 0;
         Console.WriteLine("Welcome to Journal 1.0");
         Console.WriteLine($"Today is {date}...");
 
@@ -17,6 +18,7 @@ class Program
     static void ShowMenu()
     {
         string userOpt = "";
+        int i = 0;
         List<string> menu = new List<string>
         {
             "1. Write", "2. Display", "3. Load", "4. Save", "5. Quit"
@@ -87,8 +89,11 @@ class Program
     {
         string prompt = GetPrompt();
         string userEntry;
+        Entry[] entries = new Entry[2];
+
         Console.WriteLine(prompt);
         userEntry = GetEntry();
+
         return userEntry;
     }
 
@@ -129,6 +134,6 @@ public class Entry
 
     public void Display()
     {
-        Console.WriteLine($"{_date} {_prompt} {_entry}");
+        Console.WriteLine($"{_date}\n     {_entry}");
     }
 }
