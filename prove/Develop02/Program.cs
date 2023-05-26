@@ -6,7 +6,6 @@ class Program
     static void Main(string[] args)
     {
         string date = GetDate();
-        int i = 0;
         Console.WriteLine("Welcome to Journal 1.0");
         Console.WriteLine($"Today is {date}...");
 
@@ -18,8 +17,9 @@ class Program
     static void ShowMenu()
     {
         string userOpt = "";
-        int i = 0;
+        List<string> entries = new List<string>();
         List<string> menu = new List<string>
+        
         {
             "1. Write", "2. Display", "3. Load", "4. Save", "5. Quit"
         };
@@ -38,19 +38,24 @@ class Program
 
             if(userOpt == "1")
             {
-                Write();
+                AddList(entries, Write());
             }
             else if(userOpt == "2")
             {
-                Display();
+                Display(entries);
             }
             else if(userOpt == "3")
             {
-                Load();
+                Console.Write("What is the name of the file you would like to load? ");
+                string file = Console.ReadLine();
+                Load(entries, file);
             }
             else if(userOpt == "4")
             {
-                Save();
+                Console.Write("How would you like to name your file? ");
+                string file = Console.ReadLine();
+
+                Save(entries, file);
             }
             else if(userOpt == "5")
             {
@@ -89,7 +94,6 @@ class Program
     {
         string prompt = GetPrompt();
         string userEntry;
-        Entry[] entries = new Entry[2];
 
         Console.WriteLine(prompt);
         userEntry = GetEntry();
@@ -97,19 +101,57 @@ class Program
         return userEntry;
     }
 
-    public static void Display()
+    public static void Display(List<string> entries)
     {
-        Console.WriteLine("Here you will see all entries");
+        Console.WriteLine("");
+
+        foreach(string entry in entries)
+        {
+            Console.WriteLine(entry);
+            Console.WriteLine("");
+        }
     }
 
-    public static void Save()
+    public static void Save(List<string> toSave, string file)
     {
+        string fileName = file;
+        List<string> entries = new List<string>();
+        entries = toSave;
+
+        using (StreamWriter outputFile = new StreamWriter(fileName))
+        foreach(string entry in entries)
+        {
+            outputFile.WriteLine(entry);
+        }
+
         Console.WriteLine("Your entry has been saved.");
     }
     
-    public static void Load()
+    public static void Load(List<string> entries, string file)
     {
-        Console.WriteLine("Your file has been loaded.");
+        if(File.Exists(file))
+        {
+            entries.Clear();
+            entries = System.IO.File.ReadLines(file).ToList();
+            
+            Console.WriteLine("Your file has been loaded.");
+        }
+        
+
+        
+    }
+
+    public static List<string> AddList(List<string> list, string entry)
+    {
+        List<string> entries = new List<string>();
+        entries = list;
+        Entry entry1 = new Entry();
+        entry1._date = GetDate();
+        entry1._entry = entry;
+        string newEntry = entry1.CreateEntry();
+
+        entries.Add(newEntry);
+        return entries;
     }
 }
 
@@ -121,7 +163,7 @@ public class Journal
     {
         foreach (Entry entry in _entries)
         {
-            entry.Display();
+            Console.WriteLine(entry.CreateEntry());
         }
     }
 }
@@ -129,11 +171,12 @@ public class Journal
 public class Entry
 {
     public string _date;
-    public string _prompt;
     public string _entry;
 
-    public void Display()
+    public string CreateEntry()
     {
-        Console.WriteLine($"{_date}\n     {_entry}");
+        string newEntry = ($"{_date}\n     {_entry}");
+
+        return newEntry;
     }
 }
