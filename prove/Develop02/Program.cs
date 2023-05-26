@@ -48,7 +48,16 @@ class Program
             {
                 Console.Write("What is the name of the file you would like to load? ");
                 string file = Console.ReadLine();
-                Load(entries, file);
+                if(File.Exists(file))
+                {
+                    entries.Clear();
+                    entries = Load(entries, file);
+                    Console.WriteLine($"Your file {file} has been loaded.");
+                }
+                else
+                {
+                    Console.WriteLine("File name does not exist.");
+                }
             }
             else if(userOpt == "4")
             {
@@ -60,6 +69,10 @@ class Program
             else if(userOpt == "5")
             {
                 return;
+            }
+            else
+            {
+                Console.WriteLine("Option does not exist. Try any number from 1-5.");
             }
         }
     }
@@ -127,18 +140,11 @@ class Program
         Console.WriteLine("Your entry has been saved.");
     }
     
-    public static void Load(List<string> entries, string file)
+    public static List<string> Load(List<string> entries, string file)
     {
-        if(File.Exists(file))
-        {
-            entries.Clear();
-            entries = System.IO.File.ReadLines(file).ToList();
+        entries = System.IO.File.ReadLines(file).ToList();
             
-            Console.WriteLine("Your file has been loaded.");
-        }
-        
-
-        
+        return entries;
     }
 
     public static List<string> AddList(List<string> list, string entry)
