@@ -28,9 +28,7 @@ class Program
 
             userOpt = Console.ReadLine();
 
-            bool result = !scripture.Any(x => char.IsLetter(x));
-
-            if(result == true)
+            if(chooseScripture.FullHidden(scripture) == true)
             {
                 userOpt = "quit";
             }
@@ -41,19 +39,17 @@ class Program
             {
                 listScripture.Add(word);
             }
+
             for (int i = 0; i < 2; i++)
             {
                 Random rnd = new Random();
                 int rndNum = rnd.Next(listScripture.Count());
-                string underScores = "";
+                string underScores;
+                Word currentWord = new Word(listScripture[rndNum]);
 
-                if (!(listScripture[rndNum].Contains("_")))
+                if (currentWord.CheckHidden() == false)
                 {                
-                    foreach (char letter in listScripture[rndNum])
-                        {
-                            underScores = underScores + "_";
-                        }
-
+                    underScores = currentWord.GetUnderscores();
                     listScripture[rndNum] = underScores;
                 }
             }
