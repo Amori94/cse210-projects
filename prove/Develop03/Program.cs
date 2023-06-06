@@ -5,55 +5,51 @@ class Program
     static void Main(string[] args)
     {
         string userOpt = "";
-        string scripture;
-        string reference;
         
         Console.Clear();
         Console.WriteLine("Choose a scripture from 1-4:\n");
         Reference show = new Reference();
         show.ShowAllRef();
 
-        string scriptSelector = Console.ReadLine();
+        string selector = Console.ReadLine();
 
-        Scripture chooseScripture = new Scripture(scriptSelector);
-        scripture = chooseScripture.GetScripture();
-        Reference userRef = new Reference(scriptSelector);
-        reference = userRef.GetUserRef();
+        Scripture scripture = new Scripture(selector);
+        Reference reference = new Reference(selector);
+        int scriptureLong = scripture.GetScriptureList().Count();
 
         while (userOpt != "quit")
         {
             Console.Clear();
-            Console.WriteLine($"{reference}{scripture}");
+            Console.WriteLine($"{reference.GetUserRef()}{scripture.GetScripture()}");
             Console.Write("\nPress enter to continue or type 'quit' to finish: ");
 
             userOpt = Console.ReadLine();
 
-            if(chooseScripture.FullHidden(scripture) == true)
+            if(scripture.FullHidden() == true)
             {
                 userOpt = "quit";
             }
 
-            List<string> listScripture = new List<string>();
-
-            foreach (string word in scripture.Split(" "))
+            if (scriptureLong > 2)
             {
-                listScripture.Add(word);
-            }
-
-            for (int i = 0; i < 2; i++)
-            {
-                Random rnd = new Random();
-                int rndNum = rnd.Next(listScripture.Count());
-                string underScores;
-                Word currentWord = new Word(listScripture[rndNum]);
-
-                if (currentWord.CheckHidden() == false)
-                {                
-                    underScores = currentWord.GetUnderscores();
-                    listScripture[rndNum] = underScores;
+                for (int i = 0; i < 3; i++)
+                {
+                    scripture.SwapWord();
+                    scriptureLong = scriptureLong - 1;
                 }
             }
-            scripture = string.Join(" ", listScripture);
+            else if (scriptureLong == 2)
+            {
+                scripture.SwapWord();
+                scripture.SwapWord();
+                scriptureLong = scriptureLong - 2;
+            }
+            else if (scriptureLong == 1)
+            {
+                scripture.SwapWord();
+                scriptureLong = scriptureLong - 1;
+            }
+            
         }
     }
 }
