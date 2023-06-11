@@ -1,0 +1,29 @@
+Class: Activity
+private _activityName: string
+private _description: string
+private _duration: int
+DisplayStartMsg(): string
+DisplayEndMsg(): string
+Waiting(): void
+Countdown(): void
+
+Class: BreathingActivity : Activity
+BreathSeq(): void
+CoolDown(): void
+
+Class: ReflectingActivity : Activity
+private _promptList1: List<string>
+private _promptList2: List<string>
+PromptUser1(): string
+PromptUser2(): string
+
+Class: ListingActivity : Activity
+private _itemList: List<string>
+PromptUser1(): string
+ListingSeq(): void
+ShowTot(): string
+
+Class: MainMenu
+private _menu: List<string>
+public MainMenu(): _menu(Act 1, Act 2, Act 3, Quit)
+ShowMenu()
