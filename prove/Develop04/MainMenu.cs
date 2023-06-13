@@ -45,11 +45,15 @@ class MainMenu
         {
             ReflectingActivity startAct = new ReflectingActivity();
             startAct.DisplayStartMsg();
+            startAct.ReflectionAct();
+            startAct.DisplayEndMsg();
         }
         else if(userChoice == "3")
         {
             ListingActivity startAct = new ListingActivity();
             startAct.DisplayStartMsg();
+            startAct.ListAct();
+            startAct.DisplayEndMsg();
         }
         else if(userChoice == "4")
         {

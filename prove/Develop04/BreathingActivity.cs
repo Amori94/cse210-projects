@@ -9,20 +9,18 @@ public class BreathingActivity : Activity
     
     public void BreathSeq()
     {
-        Console.WriteLine("Get Ready...");
-        Waiting(5);
         DateTime startTime = DateTime.Now;
         DateTime endTime = startTime.AddSeconds(int.Parse(_duration));
         while (DateTime.Now < endTime)
         {
             Console.WriteLine("Breath in...\n\n");
-            Waiting(5);
+            Countdown(5);
             Console.WriteLine("Hold breath...\n\n");
-            Waiting(5);
+            Countdown(5);
             Console.WriteLine("Breath out...\n\n");
-            Waiting(5);
+            Countdown(5);
             Console.WriteLine("Hold breath...\n\n");
-            Waiting(5);  
+            Countdown(5);  
         }
 
         Console.WriteLine("Well Done!");

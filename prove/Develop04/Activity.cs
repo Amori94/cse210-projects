@@ -17,6 +17,9 @@ public class Activity
         Console.WriteLine($"{_description} \n");
         Console.Write("How long would you like your session to be? ");
         _duration = Console.ReadLine();
+        Console.Clear();
+        Console.WriteLine("Get Ready...");
+        Countdown(3);
     }
 
     public void DisplayEndMsg()
@@ -24,6 +27,7 @@ public class Activity
         Console.Clear();
         Console.WriteLine($"You have completed {_duration} seconds of {_activityName} Activity.\n");
         _duration = "0";
+        Waiting(5);
         MainMenu reStart = new MainMenu();
         reStart.ShowMenu();
     }
@@ -56,8 +60,18 @@ public class Activity
         }
     }
 
-    public void Countdown()
+    public void Countdown(int start)
     {
+        Console.CursorVisible = false;
 
+        while (start != 0)
+        {
+                Console.Write(start);
+                Thread.Sleep(1000);
+                Console.Write("\b \b");
+                start--;
+        }
+
+        Console.CursorVisible = true;
     }
 }
