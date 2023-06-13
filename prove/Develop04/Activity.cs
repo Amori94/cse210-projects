@@ -1,3 +1,5 @@
+using System.Reflection;
+
 public class Activity
 {
     private string _activityName;
@@ -28,8 +30,6 @@ public class Activity
         Console.WriteLine($"You have completed {_duration} seconds of {_activityName} Activity.\n");
         _duration = "0";
         Waiting(5);
-        MainMenu reStart = new MainMenu();
-        reStart.ShowMenu();
     }
 
     public void Waiting(int repeat)

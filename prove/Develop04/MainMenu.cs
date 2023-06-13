@@ -40,6 +40,7 @@ class MainMenu
             startAct.DisplayStartMsg();
             startAct.BreathSeq();
             startAct.DisplayEndMsg();
+            ShowMenu();
         }
         else if(userChoice == "2")
         {
@@ -47,6 +48,7 @@ class MainMenu
             startAct.DisplayStartMsg();
             startAct.ReflectionAct();
             startAct.DisplayEndMsg();
+            ShowMenu();
         }
         else if(userChoice == "3")
         {
@@ -54,6 +56,7 @@ class MainMenu
             startAct.DisplayStartMsg();
             startAct.ListAct();
             startAct.DisplayEndMsg();
+            ShowMenu();
         }
         else if(userChoice == "4")
         {
