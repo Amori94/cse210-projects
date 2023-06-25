@@ -12,7 +12,7 @@ class Program
 
         while (userOpt != 6)
         {
-            userOpt = MainMenu();
+            userOpt = MainMenu(userPoints);
 
             if (userOpt == 1)
             {
@@ -82,10 +82,12 @@ class Program
                 Console.Write("What is the name of the file?(Only name, not file type) ");
                 string fileName = $"{Console.ReadLine()}.txt";
                 goals = Load(fileName);
-                
+
                 string[] lines = System.IO.File.ReadAllLines(fileName);
 
                 int points = Int32.Parse(lines[0]);
+
+                userPoints = points;
                 
             }
 
@@ -121,7 +123,7 @@ class Program
         return option;
     }
 
-    static int MainMenu()
+    static int MainMenu(int points)
     {
         List<string> mainMenu = new List<string>
         {
@@ -129,6 +131,7 @@ class Program
         };
 
         Console.Clear();
+        Console.WriteLine($"You have {points} points.");
         Console.WriteLine("Main Menu:");
 
         int i = 1;
