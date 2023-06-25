@@ -1,3 +1,4 @@
 100
 SimpleGoal,Running,Run 15 min per day,100,False
-EternalGoal,Staying active,Attending church always,200
+EternalGoal,Study,Study every day,50
+ChecklistGoal,Wait 3 times,Wait 3 times,50,3,100,2,False

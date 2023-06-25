@@ -20,4 +20,11 @@ class EternalGoal : Goal
         string saveFormat = $"EternalGoal,{_name},{_description},{_points}";
         return saveFormat;
     }
+
+    public override void AddPoints()
+    {}
+    public override int GetBonus()
+    {
+        return 0;
+    }
 }

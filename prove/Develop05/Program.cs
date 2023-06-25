@@ -93,7 +93,43 @@ class Program
 
             else if (userOpt == 5)
             {
-                
+                Console.Clear();
+                Console.WriteLine("These are the goals:");
+                int i = 1;
+                foreach (Goal goal in goals)
+                {
+                    Console.WriteLine($"    {i}. {goal.GetGoal()}");
+                    i++;
+                }
+
+                Console.Write("Which goal did you accomplish? ");
+                int chosenGoal = Int32.Parse(Console.ReadLine());
+
+                if (goals[chosenGoal-1] is SimpleGoal)
+                {
+                    goals[chosenGoal-1].Completed();
+                    int morePoints = goals[chosenGoal-1].GetPoints();
+                    userPoints += morePoints;
+                }
+
+                else if (goals[chosenGoal-1] is EternalGoal)
+                {
+                    int morePoints = goals[chosenGoal-1].GetPoints();
+                    userPoints += morePoints;
+                }
+
+                else if (goals[chosenGoal-1] is ChecklistGoal)
+                {
+                    goals[chosenGoal-1].AddPoints();
+                    int morePoints = goals[chosenGoal-1].GetPoints();
+                    userPoints += morePoints;
+
+                    if((goals[chosenGoal-1].CheckCompleted()) == "X")
+                    {
+                        userPoints += goals[chosenGoal-1].GetBonus();
+                    }
+                                       
+                }
             }
         }
 
@@ -217,6 +253,7 @@ class Program
                 bool completed = bool.Parse(parts[7]);
                 
                 ChecklistGoal goal = new ChecklistGoal(name, description, ipoints, bonus, bonusPoints);
+                goal.SetDone(done);
 
                 if (completed == true)
                 {

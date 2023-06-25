@@ -10,10 +10,6 @@ class ChecklistGoal : Goal
         _done = 0;
     }
 
-    public void addPoints()
-    {
-        _done += 1;
-    }
     public override string GetGoal()
     {
         string goal;
@@ -30,5 +26,31 @@ class ChecklistGoal : Goal
     {
         string saveFormat = $"ChecklistGoal,{_name},{_description},{_points},{_bonus},{_bonusPoints},{_done},{_completed}";
         return saveFormat;
+    }
+
+    public override void AddPoints()
+    {
+        _done += 1;
+    }
+    public override int GetBonus()
+    {
+        return _bonusPoints;
+    }
+
+    public override string CheckCompleted()
+    {
+        string checkMark = " ";
+
+        if (_done == _bonus)
+        {
+            checkMark = "X";
+        }
+
+        return checkMark;
+    }
+
+    public void SetDone(int done)
+    {
+        _done = done;
     }
 }

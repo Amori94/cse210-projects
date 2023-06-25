@@ -21,4 +21,12 @@ class SimpleGoal : Goal
         string saveFormat = $"SimpleGoal,{_name},{_description},{_points},{_completed}";
         return saveFormat;
     }
+
+    public override void AddPoints()
+    {}
+
+    public override int GetBonus()
+    {
+        return 0;
+    }
 }

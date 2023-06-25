@@ -15,8 +15,18 @@ public abstract class Goal
 
     public abstract string GetGoal();
     public abstract void Completed();
+    public abstract void AddPoints();
+    public abstract int GetBonus();
     public abstract string SaveGoalFormat();
-    public string CheckCompleted()
+    public string GetName()
+    {
+        return _name;
+    }
+    public int GetPoints()
+    {
+        return _points;
+    }
+    public virtual string CheckCompleted()
     {
         string checkMark = " ";
 
