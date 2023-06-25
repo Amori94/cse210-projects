@@ -15,10 +15,11 @@ public abstract class Goal
 
     public abstract string GetGoal();
     public abstract void Completed();
+    public abstract string SaveGoalFormat();
     public string CheckCompleted()
     {
         string checkMark = " ";
-        
+
         if (_completed == true)
         {
             checkMark = "X";

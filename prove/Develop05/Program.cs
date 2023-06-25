@@ -79,6 +79,13 @@ class Program
 
             else if (userOpt == 4)
             {
+                Console.Write("What is the name of the file?(Only name, not file type) ");
+                string fileName = $"{Console.ReadLine()}.txt";
+                goals = Load(fileName);
+                
+                string[] lines = System.IO.File.ReadAllLines(fileName);
+
+                int points = Int32.Parse(lines[0]);
                 
             }
 
@@ -140,7 +147,7 @@ class Program
 
     static void Save(List<Goal> goals, int points)
     {
-        Console.Write("How would you like to name your file? (just name, no file type)");
+        Console.Write("How would you like to name your file?(just name, no file type) ");
         string fileName = $"{Console.ReadLine()}.txt";
         
         using (StreamWriter outputFile = new StreamWriter(fileName))
@@ -148,8 +155,80 @@ class Program
             outputFile.WriteLine(points);
             foreach (Goal goal in goals)
             {
-                outputFile.WriteLine(goal.GetGoal());
+                outputFile.WriteLine(goal.SaveGoalFormat());
             }
         }
+
+        Console.Clear();
+        Console.WriteLine($"{fileName} has been saved... ");
+        Console.Write("Press Enter to continue... ");
+        Console.ReadLine();
+    }
+
+    static List<Goal> Load(string fileName)
+    {
+        List<Goal> goals = new List<Goal>();
+
+        string[] lines = System.IO.File.ReadAllLines(fileName);
+
+        lines = lines.Skip(1).ToArray();
+
+        foreach (string line in lines)
+        {
+            string[] parts = line.Split(",");
+
+            if (parts[0] == "SimpleGoal")
+            {
+                string name = parts[1];
+                string description = parts[2];
+                int ipoints = Int32.Parse(parts[3]);
+                bool completed = bool.Parse(parts[4]);
+
+                SimpleGoal goal = new SimpleGoal(name, description, ipoints);
+
+                if (completed == true)
+                {
+                    goal.Completed();
+                }
+
+                goals.Add(goal);
+            }
+            else if (parts[0] == "EternalGoal")
+            {
+                string name = parts[1];
+                string description = parts[2];
+                int ipoints = Int32.Parse(parts[3]);
+
+                EternalGoal goal = new EternalGoal(name, description, ipoints);  
+
+                goals.Add(goal);
+            }
+            else if (parts[0] == "ChecklistGoal")
+            {
+                string name = parts[1];
+                string description = parts[2];
+                int ipoints = Int32.Parse(parts[3]);
+                int bonus = Int32.Parse(parts[4]);
+                int bonusPoints = Int32.Parse(parts[5]);
+                int done = Int32.Parse(parts[6]);
+                bool completed = bool.Parse(parts[7]);
+                
+                ChecklistGoal goal = new ChecklistGoal(name, description, ipoints, bonus, bonusPoints);
+
+                if (completed == true)
+                {
+                    goal.Completed();
+                }
+
+                goals.Add(goal);
+            }
+        }
+
+        Console.Clear();
+        Console.WriteLine($"{fileName} has been loaded... ");
+        Console.Write("Press Enter to continue... ");
+        Console.ReadLine();
+
+        return goals;
     }
 }

@@ -25,4 +25,10 @@ class ChecklistGoal : Goal
     {
         _completed = true;
     }
+
+    public override string SaveGoalFormat()
+    {
+        string saveFormat = $"ChecklistGoal,{_name},{_description},{_points},{_bonus},{_bonusPoints},{_done},{_completed}";
+        return saveFormat;
+    }
 }

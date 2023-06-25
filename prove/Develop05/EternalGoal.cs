@@ -13,6 +13,11 @@ class EternalGoal : Goal
 
     public override void Completed()
     {
-        _completed = true;
+    }
+
+    public override string SaveGoalFormat()
+    {
+        string saveFormat = $"EternalGoal,{_name},{_description},{_points}";
+        return saveFormat;
     }
 }

@@ -15,4 +15,10 @@ class SimpleGoal : Goal
     {
         _completed = true;
     }
+
+    public override string SaveGoalFormat()
+    {
+        string saveFormat = $"SimpleGoal,{_name},{_description},{_points},{_completed}";
+        return saveFormat;
+    }
 }
