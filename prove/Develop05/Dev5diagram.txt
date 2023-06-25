@@ -1,0 +1,42 @@
+Class: MainMenu
+List<string> _mainMenu;
+public void GetMenu()
+
+
+public abstract Class: Goal
+string protected _name
+string protected _description
+int protected _points
+List<Goal> _goals
+public abstract void UserInput()
+public abstract string DisplayGoal()
+public abstract string DisplayPoints()
+public void ListGoals()
+
+Class: SimpleGoal : Goal
+public override void UserInput()
+
+
+Class: EternalGoal : Goal
+private string _specification;
+public override void UserInput()
+
+
+Class: ChacklistGoal : Goal
+private string _bonus;
+private int _bonusPoints;
+public override void UserInput()
+
+
+Class: UserGoal : Goal
+private string _specification()
+public override void UserInput()
+
+
+Class: Save
+public void SaveToDoc()
+
+
+Class: Load
+public void LoadFromDoc()
+
