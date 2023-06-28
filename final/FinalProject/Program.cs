@@ -14,7 +14,8 @@ class Program
 
             if (input == "New Game")
             {
-
+                Hero hero = new Hero("Spider",10,2,3,"extra res","Peter",3,6);
+                HeroTurn(hero,1);
             }
 
             else if (input == "Continue Game")
@@ -36,49 +37,23 @@ class Program
         List<string> mainMenu = new List<string>
         {"New Game", "Load Game", "Quit"};
         if (loaded == true) {mainMenu[0] = "Continue Game";}
-        int input;
-        int i = 1;
 
-        //display main menu
-        Console.Clear();
-        Console.WriteLine("Main Menu");
-
-        foreach (string name in mainMenu)
-        {
-            Console.WriteLine($"    {i}. {name}");
-            i++;
-        }
-
-        //get user input to choose menu option
-        Console.Write("Choose an option from the menu: ");
-        input = Int32.Parse(Console.ReadLine());
-
-        return mainMenu[input - 1];
+        return MenuReader("Main Menu", mainMenu);
     }
 
     static string LoadGame()
     {   
-        //get file names in variable, initiate i variable
+        //get file names into List
         string path = "Saved Files";
         string[] savedGames = Directory.GetFiles(path);
-        int i = 1;
-        int chosenFile;
-
-        //display file names
-        Console.Clear();
-        Console.WriteLine("Saved Games:");
-
+        List<string> fileNames = new List<string>();
+        
         foreach(string name in savedGames)
         {
-            Console.WriteLine($"    {i} - {Path.GetFileName(name)}.");
-            i++;
+            fileNames.Add(Path.GetFileName(name));
         }
 
-        //get user input to load correct game
-        Console.Write("What game would you like to load? ");
-        chosenFile = Int32.Parse(Console.ReadLine());
-
-        return savedGames[chosenFile - 1];
+        return MenuReader("Saved Games", fileNames);
     }
 
     static void GameLoader(string fileName)
@@ -86,5 +61,41 @@ class Program
         Console.Clear();
         Console.Write($"{fileName} has been loaded correctly.\n Press Enter to continue... ");
         Console.ReadLine();
+    }
+
+    static void HeroTurn(Hero name, int rep)
+    {
+        List<string> turnMenu = new List<string>
+        {"Check Turn Options", "Change HP", "End Turn"};
+        Console.WriteLine($"It is {name.GetName()}'s turn:");
+        MenuReader("Hero Turn", turnMenu);
+    }
+
+    static void VillainTurn(Villain name, int rep)
+    {
+        List<string> turnMenu = new List<string>
+        {"Check Turn Options", "Change HP", "End Turn"};
+        MenuReader("Hero Turn", turnMenu);
+    }
+
+    static string MenuReader(string title, List<string> menu)
+    {
+        int input;
+        int i = 1;
+
+        Console.Clear();
+        Console.WriteLine($"{title}:");
+
+        foreach (string name in menu)
+        {
+            Console.WriteLine($"    {i}. {name}");
+            i++;
+        }
+
+        //get user input to choose menu option
+        Console.Write("Choose an option: ");
+        input = Int32.Parse(Console.ReadLine());
+
+        return menu[input - 1];
     }
 }
