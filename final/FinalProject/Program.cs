@@ -67,7 +67,9 @@ class Program
     {
         List<string> turnMenu = new List<string>
         {"Check Turn Options", "Change HP", "End Turn"};
-        Console.WriteLine($"It is {name.GetName()}'s turn:");
+        Console.Clear();
+        Console.Write($"It is {name.GetName()}'s turn, get ready in ");
+        Countdown(5);
         MenuReader("Hero Turn", turnMenu);
     }
 
@@ -97,5 +99,20 @@ class Program
         input = Int32.Parse(Console.ReadLine());
 
         return menu[input - 1];
+    }
+
+    static void Countdown(int start)
+    {
+        Console.CursorVisible = false;
+
+        while (start != 0)
+        {
+                Console.Write(start);
+                Thread.Sleep(1000);
+                Console.Write("\b \b");
+                start--;
+        }
+
+        Console.CursorVisible = true;
     }
 }

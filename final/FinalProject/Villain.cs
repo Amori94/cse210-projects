@@ -4,6 +4,6 @@ class Villain : Character
 
     public Villain(string name, int hP, int pla, int atk, string spe, int phase) : base(name, hP, pla, atk, spe)
     {
-        int _phase = phase;
+        _phase = phase;
     }
 }
