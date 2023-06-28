@@ -14,7 +14,7 @@ class Program
 
             if (input == "New Game")
             {
-                Hero hero = new Hero("Spider",10,2,3,"extra res","Peter",3,6);
+                Hero hero = new Hero("Spider",10,2,3,"extra res","Peter",3,6,"Extra resource");
                 HeroTurn(hero,1);
             }
 
@@ -66,10 +66,12 @@ class Program
     static void HeroTurn(Hero name, int rep)
     {
         List<string> turnMenu = new List<string>
-        {"Check Turn Options", "Change HP", "End Turn"};
+        {"Check Turn Options", "Change HP", "Change Identity", "End Turn"};
+
         Console.Clear();
         Console.Write($"It is {name.GetName()}'s turn, get ready in ");
         Countdown(5);
+        
         MenuReader("Hero Turn", turnMenu);
     }
 

@@ -4,7 +4,7 @@ public abstract class Character
     int _hP;
     int _pla;
     int _atk;
-    string _spe;
+    protected string _spe;
 
     public Character(string name, int hP, int pla, int atk, string spe)
     {
@@ -13,5 +13,30 @@ public abstract class Character
         _pla = pla;
         _atk = atk;
         _spe = spe;
+    }
+
+    public virtual string GetName()
+    {
+        return _name;
+    }
+
+    public int GetHP()
+    {
+        return _hP;
+    }
+
+    public int GetPla()
+    {
+        return _pla;
+    }
+
+    public int GetAtk()
+    {
+        return _atk;
+    }
+
+    public virtual string GetSpe()
+    {
+        return _spe;
     }
 }
