@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 class Program
 {
@@ -7,6 +8,8 @@ class Program
         string input = "";
         bool loaded = false;
         Console.WriteLine("MARVEL CHAMPIONS COMPANION");
+        Console.Write("Starting in... ");
+        Countdown(3);
 
         while (input != "Quit")
         {
@@ -14,8 +17,7 @@ class Program
 
             if (input == "New Game")
             {
-                Hero hero = new Hero("Spider",10,2,3,"extra res","Peter",3,6,"Extra resource");
-                HeroTurn(hero,1);
+                ScenarioSelector();
             }
 
             else if (input == "Continue Game")
@@ -80,6 +82,38 @@ class Program
         List<string> turnMenu = new List<string>
         {"Check Turn Options", "Change HP", "End Turn"};
         MenuReader("Hero Turn", turnMenu);
+    }
+
+    static void ScenarioSelector()
+    {
+        List<string> scenarios = new List<string>();
+        string fileName = "Game Objects/Scenarios.txt";
+        string chosen;
+        string module = "";
+        int threat = 0;
+        int startThreat = 0;
+        int roundThreat = 0;
+        
+        foreach (string line in System.IO.File.ReadAllLines(fileName).ToList())
+        {
+            scenarios.Add($"{line.Split(", ").ToList()[0]}");
+        }
+
+        chosen = MenuReader("Scenarios", scenarios);
+
+        foreach (string line in System.IO.File.ReadAllLines(fileName).ToList())
+        {
+            if ((line.Split(", ").ToList()[0]) == chosen)
+            {
+                module = line.Split(", ").ToList()[1];
+                threat = Int32.Parse(line.Split(", ").ToList()[3]);
+                startThreat = Int32.Parse(line.Split(", ").ToList()[4]);
+                roundThreat = Int32.Parse(line.Split(", ").ToList()[5]);
+            }
+        }       
+
+        Console.WriteLine($"You have chosen to {chosen}");
+        Scenario newScene = new Scenario(chosen, module, threat, startThreat, roundThreat);
     }
 
     static string MenuReader(string title, List<string> menu)

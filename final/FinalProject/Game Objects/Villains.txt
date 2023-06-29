@@ -1,0 +1,3 @@
+"Rhino", 14, 1, 2, "None."
+"Klaw", 12, 2, 0, "When Klaw attacks give an extra augment card."
+"Ultron", 17, 1, 2, "After Ultron attacks choose between adding to the plan or place your top deck card face down acting as a Drone Minion."

@@ -1,16 +1,20 @@
 class Hero : Character
 {
+    int _def;
     string _nameAlter;
     int _rec;
     int _handSize;
+    int _altHandSize;
     string _alterSpe;
     bool _isHero = false;
 
-    public Hero(string name, int hP, int pla, int atk, string spe, string nameAlter, int rec, int handSize, string alterSpe) : base(name, hP, pla, atk, spe)
+    public Hero(string name, int hP, int pla, int atk, string spe, int def, string nameAlter, int rec, int handSize, int altHandSize, string alterSpe) : base(name, hP, pla, atk, spe)
     {
+        _def = def;
         _nameAlter = nameAlter;
         _rec = rec;
         _handSize = handSize;
+        _altHandSize = altHandSize;
         _alterSpe = alterSpe;
     }
 
