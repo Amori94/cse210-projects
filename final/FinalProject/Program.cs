@@ -7,17 +7,25 @@ class Program
     {
         string input = "";
         bool loaded = false;
-        Console.WriteLine("MARVEL CHAMPIONS COMPANION");
-        Console.Write("Starting in... ");
-        Countdown(3);
+        Console.WriteLine("                 ___          ____    \n"+
+        "|\\    /|   /\\   |   |\\      /|    |   \n"+
+        "| \\  / |  /  \\  |___| \\    / |___ |   \n"+
+        "|  \\/  | /____\\ |  \\   \\  /  |    |   \n"+
+        "|      |/      \\|   \\   \\/   |____|___");
+        Console.WriteLine("       _    _      _   _      _ \n"+
+        "      | |_||_||\\/||_||| ||\\ ||_ \n"+
+        "      |_| || ||  ||  ||_|| \\| _|");
+        SlowWrite("      ---------COMPANION--------      ");
+        Console.Write("\n\nPress Enter key to continue...");
+        Console.ReadLine();
 
         while (input != "Quit")
         {
-            input = DisplayMainMenu(loaded);
+            input = MainMenu(loaded);
 
             if (input == "New Game")
             {
-                ScenarioSelector();
+                InitiateNewGame();
             }
 
             else if (input == "Continue Game")
@@ -33,14 +41,18 @@ class Program
         }
     }
 
-    static string DisplayMainMenu(bool loaded)
+    static string MainMenu(bool loaded)
     {
-        //initiate mainMenu List and int i
+        //initiate mainMenu List and int i, set title for menu
+        string title = "Main Menu";
         List<string> mainMenu = new List<string>
         {"New Game", "Load Game", "Quit"};
+        //if loaded game, continue instead of new game
         if (loaded == true) {mainMenu[0] = "Continue Game";}
 
-        return MenuReader("Main Menu", mainMenu);
+        Menus menu = new Menus(title, mainMenu);
+
+        return menu.SimpleMenu();
     }
 
     static string LoadGame()
@@ -55,7 +67,9 @@ class Program
             fileNames.Add(Path.GetFileName(name));
         }
 
-        return MenuReader("Saved Games", fileNames);
+        Menus menu = new Menus(path, fileNames);
+
+        return menu.SimpleMenu();
     }
 
     static void GameLoader(string fileName)
@@ -65,23 +79,62 @@ class Program
         Console.ReadLine();
     }
 
+    static void InitiateNewGame()
+    {
+        //initiate int variable heroCount
+        int heroCount;
+
+        //select scenario and module
+        ScenarioSelector();
+
+        //select heroes
+        Console.Write("How many players will play?(1-4) ");
+        heroCount = Int32.Parse(Console.ReadLine());
+        HeroSelector(heroCount);
+    }
+
+    static void HeroSelector(int heroCount)
+    {
+        List<Hero> heroes = new List<Hero>();
+        List<string> chooseHeroes = new List<string>();
+        string fileName = "Game Objects/Heroes.txt";
+
+        foreach (string line in System.IO.File.ReadAllLines(fileName).ToList())
+        {
+            chooseHeroes.Add($"{line.Split(", ").ToList()[0]}");
+        }
+
+        while (heroCount != 0)
+        {
+            Menus heroList = new Menus("Choose your hero", chooseHeroes);
+            string chosenHero = heroList.SimpleMenu();
+            Console.WriteLine($"You have chosen {chosenHero}!");
+            Console.Write("Press Enter key to continue... ");
+            Console.ReadLine();
+            chooseHeroes.Remove(chosenHero);
+            heroCount--;
+        }
+    }
+
     static void HeroTurn(Hero name, int rep)
     {
         List<string> turnMenu = new List<string>
         {"Check Turn Options", "Change HP", "Change Identity", "End Turn"};
 
         Console.Clear();
-        Console.Write($"It is {name.GetName()}'s turn, get ready in ");
-        Countdown(5);
+        Console.Write($"It is {name.GetName()}'s turn, get ready ");
+        Countdown(3);
         
-        MenuReader("Hero Turn", turnMenu);
+        Menus menu = new Menus($"It is {name.GetName()}'s turn", turnMenu);
+        menu.displayMenu();
     }
 
     static void VillainTurn(Villain name, int rep)
     {
         List<string> turnMenu = new List<string>
         {"Check Turn Options", "Change HP", "End Turn"};
-        MenuReader("Hero Turn", turnMenu);
+        Menus menu = new Menus($"It is {name.GetName()}'s turn", turnMenu);
+        menu.displayMenu();
     }
 
     static void ScenarioSelector()
@@ -98,8 +151,8 @@ class Program
         {
             scenarios.Add($"{line.Split(", ").ToList()[0]}");
         }
-
-        chosen = MenuReader("Scenarios", scenarios);
+        Menus menu = new Menus("-Scenarios-", scenarios);
+        chosen = menu.SimpleMenu();
 
         foreach (string line in System.IO.File.ReadAllLines(fileName).ToList())
         {
@@ -116,27 +169,6 @@ class Program
         Scenario newScene = new Scenario(chosen, module, threat, startThreat, roundThreat);
     }
 
-    static string MenuReader(string title, List<string> menu)
-    {
-        int input;
-        int i = 1;
-
-        Console.Clear();
-        Console.WriteLine($"{title}:");
-
-        foreach (string name in menu)
-        {
-            Console.WriteLine($"    {i}. {name}");
-            i++;
-        }
-
-        //get user input to choose menu option
-        Console.Write("Choose an option: ");
-        input = Int32.Parse(Console.ReadLine());
-
-        return menu[input - 1];
-    }
-
     static void Countdown(int start)
     {
         Console.CursorVisible = false;
@@ -147,6 +179,19 @@ class Program
                 Thread.Sleep(1000);
                 Console.Write("\b \b");
                 start--;
+        }
+
+        Console.CursorVisible = true;
+    }
+
+    static void SlowWrite(string phrase)
+    {
+        Console.CursorVisible = false;
+
+        foreach (Char letter in phrase)
+        {
+                Thread.Sleep(125);
+                Console.Write(letter);
         }
 
         Console.CursorVisible = true;

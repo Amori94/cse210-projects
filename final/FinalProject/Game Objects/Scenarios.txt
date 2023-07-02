@@ -1,3 +1,3 @@
 The Break-In!, Bomb Scare, Rhino, 7, 0, 1
-Underground Distribution, Masters of Evil, Klaw 7, 0, 1
-The Crimson Cowl, Under Attack, Ultron 7, 0, 1
+Underground Distribution, Masters of Evil, Klaw, 7, 0, 1
+The Crimson Cowl, Under Attack, Ultron, 7, 0, 1
