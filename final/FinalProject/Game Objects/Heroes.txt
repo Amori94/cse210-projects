@@ -1,5 +1,5 @@
-Spider-Man, 10, 1, 2, "When the Villain attacks you, steal a card.", 3,"Peter Parker", 3, 5, 6, "Generate 1 mental resource per round."
-Captain Marvel, 12, 2, 2, "Spend 1 energy resource and heal 1 HP - steal 1 card.", 1, "Carol Danvers", 4, 5, 6, "Any player can steal 1 card per round."
-Iron Man, 9, 2, 1, "Receive +1 hand size for each Technology you control (max 7).", 1, "Tony Stark", 3, 1, 6, "Look at the next 3 cards from the top of the deck - add 1 to your hand and discard the others."
-She-Hulk, 15, 1, 3, "When you change to this identity deal 2 HP to an enemy.", 2, "Jennifer Walters", 5, 4, 6, "Whenever a plan will grow remove 1 from that plan."
-Black Panther, 11, 2, 2, "When this character gets attacked deal 1 HP to the attacking character.", 2, "T'Challa", 4, 6, 5, "Look for a Black Panther upgrade and added to your hand - shuffle your deck."
+Spider-Man, 10, 1, 2, When the Villain attacks you steal a card., 3, Peter Parker, 3, 5, 6, Generate 1 mental resource per round.
+Captain Marvel, 12, 2, 2, Spend 1 energy resource and heal 1 HP - steal 1 card., 1, Carol Danvers, 4, 5, 6, Any player can steal 1 card per round.
+Iron Man, 9, 2, 1, Receive +1 hand size for each Technology you control (max 7)., 1, Tony Stark, 3, 1, 6, Look at the next 3 cards from the top of the deck - add 1 to your hand and discard the others.
+She-Hulk, 15, 1, 3, When you change to this identity deal 2 HP to an enemy., 2, Jennifer Walters, 5, 4, 6, Whenever a plan will grow remove 1 from that plan.
+Black Panther, 11, 2, 2, When this character gets attacked deal 1 HP to the attacking character., 2, T'Challa, 4, 6, 5, Look for a Black Panther upgrade and added to your hand - shuffle your deck.

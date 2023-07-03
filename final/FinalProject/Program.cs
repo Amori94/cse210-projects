@@ -85,38 +85,95 @@ class Program
         int heroCount;
 
         //select scenario and module
-        ScenarioSelector();
+        Scenario scenario = ScenarioSelector();
 
         //select heroes
         Console.Write("How many players will play?(1-4) ");
         heroCount = Int32.Parse(Console.ReadLine());
-        HeroSelector(heroCount);
+        List<Hero> heroes = HeroSelector(heroCount);
+
+        //set initial stats
+        Console.WriteLine($"You are playing {scenario.GetDifficulty()} {scenario.GetName()}");
+        Console.WriteLine("The heroes are: ");
+        foreach (Hero hero in heroes)
+        {
+            Console.WriteLine($"{hero.GetName()} - current HP = {hero.GetHP()}");
+        }
+
+        Countdown(5);
+
+        //Turns
+        foreach (Hero hero in heroes)
+        {
+            HeroTurn(hero);
+        }
+        Countdown(3);
+
+        heroes.Add(heroes[0]);
+        heroes.Remove(heroes[0]);
+
+        foreach (Hero hero in heroes)
+        {
+            HeroTurn(hero);
+        }
+
     }
 
-    static void HeroSelector(int heroCount)
+    static List<Hero> HeroSelector(int heroCount)
     {
+        //initiate List<Hero> to store loaded heroes
         List<Hero> heroes = new List<Hero>();
+        //initiate List<string> to store hero names for selection menu
         List<string> chooseHeroes = new List<string>();
-        string fileName = "Game Objects/Heroes.txt";
+        //initiate string with file path
+        string path = "Game Objects/Heroes.txt";
 
-        foreach (string line in System.IO.File.ReadAllLines(fileName).ToList())
+        //create list with hero names from file
+        foreach (string line in System.IO.File.ReadAllLines(path).ToList())
         {
             chooseHeroes.Add($"{line.Split(", ").ToList()[0]}");
         }
 
+        //loop until player count is satisfied
         while (heroCount != 0)
         {
+            //User picks hero from hero list created from file
             Menus heroList = new Menus("Choose your hero", chooseHeroes);
             string chosenHero = heroList.SimpleMenu();
             Console.WriteLine($"You have chosen {chosenHero}!");
             Console.Write("Press Enter key to continue... ");
             Console.ReadLine();
+
+            //Searchs for hero name and loads data from file to Class Hero, adds Class Hero to List<Hero> heroes
+            foreach (string line in System.IO.File.ReadAllLines(path).ToList())
+            {
+                if ((line.Split(", ").ToList()[0]) == chosenHero)
+                {
+                    int HP = Int32.Parse(line.Split(", ").ToList()[1]);
+                    int pla = Int32.Parse(line.Split(", ").ToList()[2]);
+                    int atk = Int32.Parse(line.Split(", ").ToList()[3]);
+                    string spe = line.Split(", ").ToList()[4];
+                    int def = Int32.Parse(line.Split(", ").ToList()[5]);
+                    string nameAlter = line.Split(", ").ToList()[6];
+                    int rec = Int32.Parse(line.Split(", ").ToList()[7]);
+                    int handSize = Int32.Parse(line.Split(", ").ToList()[8]);
+                    int altHandSize = Int32.Parse(line.Split(", ").ToList()[9]);
+                    string alterSpe = line.Split(", ").ToList()[10];
+
+                    Hero newHero = new Hero(chosenHero, HP, pla, atk, spe, def, nameAlter, rec, handSize, altHandSize, alterSpe);
+
+                    heroes.Add(newHero);
+                }
+            }
+            //Removes hero from hero list, as each hero can only be picked once
             chooseHeroes.Remove(chosenHero);
             heroCount--;
         }
+
+        return heroes;
     }
 
-    static void HeroTurn(Hero name, int rep)
+    static void HeroTurn(Hero name)
     {
         List<string> turnMenu = new List<string>
         {"Check Turn Options", "Change HP", "Change Identity", "End Turn"};
@@ -137,7 +194,7 @@ class Program
         menu.displayMenu();
     }
 
-    static void ScenarioSelector()
+    static Scenario ScenarioSelector()
     {
         List<string> scenarios = new List<string>();
         string fileName = "Game Objects/Scenarios.txt";
@@ -151,7 +208,7 @@ class Program
         {
             scenarios.Add($"{line.Split(", ").ToList()[0]}");
         }
-        Menus menu = new Menus("-Scenarios-", scenarios);
+        Menus menu = new Menus("Scenarios", scenarios);
         chosen = menu.SimpleMenu();
 
         foreach (string line in System.IO.File.ReadAllLines(fileName).ToList())
@@ -165,8 +222,9 @@ class Program
             }
         }       
 
-        Console.WriteLine($"You have chosen to {chosen}");
+        Console.WriteLine($"You have chosen to play {chosen}");
         Scenario newScene = new Scenario(chosen, module, threat, startThreat, roundThreat);
+        return newScene;
     }
 
     static void Countdown(int start)

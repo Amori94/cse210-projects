@@ -21,4 +21,14 @@ class Scenario
     {
         _difficulty = "Expert";
     }
+
+    public string GetName()
+    {
+        return _name;
+    }
+
+    public string GetDifficulty()
+    {
+        return _difficulty;
+    }
 }
