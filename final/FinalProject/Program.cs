@@ -26,6 +26,7 @@ class Program
             if (input == "New Game")
             {
                 InitiateNewGame();
+                
             }
 
             else if (input == "Continue Game")
@@ -87,6 +88,9 @@ class Program
         //select scenario and module
         Scenario scenario = ScenarioSelector();
 
+        //initiate villain
+        Villain villain = VillainSelector(scenario.GetVillain());
+
         //select heroes
         Console.Write("How many players will play?(1-4) ");
         heroCount = Int32.Parse(Console.ReadLine());
@@ -100,23 +104,19 @@ class Program
             Console.WriteLine($"{hero.GetName()} - current HP = {hero.GetHP()}");
         }
 
-        Countdown(5);
+        Console.WriteLine("Press Enter key to continue..."); Console.ReadLine();
 
-        //Turns
-        foreach (Hero hero in heroes)
+        HeroTurn(heroes, villain);
+    }
+
+    static void Game(Scenario scenario, List<Hero> heroes, Villain villain)
+    {
+        CheckDeath(heroes);
+
+        if (!heroes.Any())
         {
-            HeroTurn(hero);
+            
         }
-        Countdown(3);
-
-        heroes.Add(heroes[0]);
-        heroes.Remove(heroes[0]);
-
-        foreach (Hero hero in heroes)
-        {
-            HeroTurn(hero);
-        }
-
     }
 
     static List<Hero> HeroSelector(int heroCount)
@@ -173,20 +173,49 @@ class Program
         return heroes;
     }
 
-    static void HeroTurn(Hero name)
+    static void HeroTurn(List<Hero> heroes, Villain villain)
     {
-        List<string> turnMenu = new List<string>
-        {"Check Turn Options", "Change HP", "Change Identity", "End Turn"};
+        foreach (Hero hero in heroes)
+        {
+            string input = "";
 
-        Console.Clear();
-        Console.Write($"It is {name.GetName()}'s turn, get ready ");
-        Countdown(3);
-        
-        Menus menu = new Menus($"It is {name.GetName()}'s turn", turnMenu);
-        menu.displayMenu();
+            while (input != "End Turn")
+            {
+                List<string> turnMenu = new List<string>
+                {"Check Turn Options", "Recover Health", "Change to Hero", "End Turn"};
+                if (hero.IsHero())
+                {
+                    turnMenu.Insert(1, $"Attack {villain.GetName()} (current HP: {villain.GetHP()})");
+                    turnMenu.Insert(1, "Thwart Main Scheme");
+                    turnMenu[4] = "Change to Alter-Ego";
+                }
+
+                string menuHeading = $"It is {hero.GetName()}'s Turn\n    HP: {hero.GetHP()}\nChoose one of the following";
+
+                Menus menu = new Menus(menuHeading, turnMenu);
+                input = menu.SimpleMenu();
+
+                if (input == "Check Turn Options")
+                {
+                    Console.Clear();
+                    Console.WriteLine("\n - Change Identity (only once)\n - Play a card from your Hand\n - Use a played card\n - Execute any Action ability\n - Ask a teammate to execute an Action ability\n");
+                    Console.Write("Press Enter key to continue... "); Console.ReadLine();
+                }
+
+                else if (input == $"Attack {villain.GetName()} (current HP: {villain.GetHP()})")
+                {
+                    villain.Damage(hero.GetAtk());
+                }
+                else if (input == "Change to Hero" || input == "Change to Alter-Ego")
+                {
+                    hero.Change();
+                }
+            }
+        }
+
     }
 
-    static void VillainTurn(Villain name, int rep)
+    static void VillainTurn(Villain name)
     {
         List<string> turnMenu = new List<string>
         {"Check Turn Options", "Change HP", "End Turn"};
@@ -199,6 +228,7 @@ class Program
         List<string> scenarios = new List<string>();
         string fileName = "Game Objects/Scenarios.txt";
         string chosen;
+        string villain = "";
         string module = "";
         int threat = 0;
         int startThreat = 0;
@@ -216,6 +246,7 @@ class Program
             if ((line.Split(", ").ToList()[0]) == chosen)
             {
                 module = line.Split(", ").ToList()[1];
+                villain = line.Split(", ").ToList()[2];
                 threat = Int32.Parse(line.Split(", ").ToList()[3]);
                 startThreat = Int32.Parse(line.Split(", ").ToList()[4]);
                 roundThreat = Int32.Parse(line.Split(", ").ToList()[5]);
@@ -223,10 +254,46 @@ class Program
         }       
 
         Console.WriteLine($"You have chosen to play {chosen}");
-        Scenario newScene = new Scenario(chosen, module, threat, startThreat, roundThreat);
+        Scenario newScene = new Scenario(chosen, villain, module, threat, startThreat, roundThreat);
         return newScene;
     }
 
+    static Villain VillainSelector(string name)
+    {
+        string fileName = "Game Objects/Villains.txt";
+        int hP = 0;
+        int pla = 0;
+        int atk = 0;
+        string spe = "";
+
+        foreach (string line in System.IO.File.ReadAllLines(fileName).ToList())
+        {
+            if ((line.Split(", ").ToList()[0]) == name)
+            {
+                hP = Int32.Parse(line.Split(", ").ToList()[1]);
+                pla = Int32.Parse(line.Split(", ").ToList()[2]);
+                atk = Int32.Parse(line.Split(", ").ToList()[3]);
+                spe = line.Split(", ").ToList()[4];
+            }
+        }
+
+        Villain villain = new Villain(name, hP, pla, atk, spe);
+
+        return villain;
+    }
+
+    static List<Hero> CheckDeath(List<Hero> heroes)
+    {
+        foreach (Hero hero in heroes)
+        {
+            if (hero.GetHP() < 1)
+            {
+                heroes.Remove(hero);
+            }
+        }
+
+        return heroes;
+    }
     static void Countdown(int start)
     {
         Console.CursorVisible = false;

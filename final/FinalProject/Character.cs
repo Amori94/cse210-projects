@@ -39,4 +39,14 @@ public abstract class Character
     {
         return _spe;
     }
+
+    public virtual void Damage(int points)
+    {
+        _hP = _hP - points;
+    }
+
+    public virtual void Recovery(int points)
+    {
+        _hP = _hP + points;
+    }
 }

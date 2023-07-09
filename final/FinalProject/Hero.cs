@@ -51,4 +51,8 @@ class Hero : Character
         _isHero = !_isHero;
     }
 
+    public bool IsHero()
+    {
+        return _isHero;
+    }
 }
