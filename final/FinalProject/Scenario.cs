@@ -21,6 +21,23 @@ class Scenario
         _currentThreat = startThreat;
     }
 
+    public Scenario()
+    {}
+
+    public void Loader(String line)
+    {
+        string[] parts = line.Split(",");
+
+        _name = parts[0];
+        _villain = parts[1];
+        _difficulty = parts[2];
+        _modules = parts[3];
+        _threat = int.Parse(parts[4]);
+        _startThreat = int.Parse(parts[5]);
+        _roundThreat = int.Parse(parts[6]);
+        _currentThreat = int.Parse(parts[7]);
+    }
+
     public void ChangeDifficulty()
     {
         _difficulty = "Expert";

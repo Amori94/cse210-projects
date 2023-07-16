@@ -15,6 +15,9 @@ public abstract class Character
         _spe = spe;
     }
 
+    public Character()
+    {}
+
     public virtual string GetName()
     {
         return _name;

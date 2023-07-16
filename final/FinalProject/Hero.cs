@@ -18,6 +18,27 @@ class Hero : Character
         _alterSpe = alterSpe;
     }
 
+    public Hero()
+    {}
+
+    public void Loader(string line)
+    {
+        string[] parts = line.Split(",");
+
+        _name = parts[0];
+        _hP = int.Parse(parts[1]);
+        _pla = int.Parse(parts[2]);
+        _atk = int.Parse(parts[3]);
+        _spe = parts[4];
+        _def = int.Parse(parts[5]);
+        _nameAlter = parts[6];
+        _rec = int.Parse(parts[7]);
+        _handSize = int.Parse(parts[8]);
+        _altHandSize = int.Parse(parts[9]);
+        _alterSpe = parts[10];
+        _isHero = bool.Parse(parts[11]);
+    }
+
     public override string GetName()
     {   
         string name;

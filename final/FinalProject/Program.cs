@@ -141,7 +141,40 @@ class Program
 
     static void InitiateSavedGame(string fileName)
     {
+        //load file to string[]
+        string[] lines = System.IO.File.ReadAllLines(fileName);
 
+        //initiate scenario and load
+        Scenario scenario = new Scenario();
+        scenario.Loader(lines[0]);
+
+        //initiate villain and load
+        Villain villain = new Villain();
+        villain.Loader(lines[1]);
+
+        //load heroes
+        int lineCount = File.ReadLines(fileName).Count() - 1;
+        List<Hero> heroes = new List<Hero>();
+
+        for (int i = 2; i < lineCount; i++)
+        {
+            Hero hero = new Hero();
+            hero.Loader(lines[i]);
+            heroes.Add(hero);
+        }
+
+        //set initial stats
+        Console.Clear();
+        Console.WriteLine($"You are playing against {scenario.GetVillain()} in {scenario.GetName()} on {scenario.GetDifficulty()} mode.");
+        Console.WriteLine("The heroes are: ");
+        foreach (Hero hero in heroes)
+        {
+            Console.WriteLine($"-----{hero.GetName()}\n - HP = {hero.GetHP()}\n - REC = {hero.GetRec()}\n - ATK = {hero.GetAtk()}\n - DEF = {hero.GetDef()}\n - THW = {hero.GetPla()}");
+        }
+
+        Console.WriteLine("Press Enter key to continue..."); Console.ReadLine();
+
+        Game(scenario, heroes, villain);
     }
 
     static void Game(Scenario scenario, List<Hero> heroes, Villain villain)
