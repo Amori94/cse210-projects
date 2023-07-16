@@ -55,4 +55,14 @@ class Hero : Character
     {
         return _isHero;
     }
+
+    public int GetRec()
+    {
+        return _rec;
+    }
+
+    public int GetDef()
+    {
+        return _def;
+    }
 }

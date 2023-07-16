@@ -97,26 +97,49 @@ class Program
         List<Hero> heroes = HeroSelector(heroCount);
 
         //set initial stats
-        Console.WriteLine($"You are playing {scenario.GetDifficulty()} {scenario.GetName()}");
+        Console.Clear();
+        Console.WriteLine($"You are playing against {scenario.GetVillain()} in {scenario.GetName()} on {scenario.GetDifficulty()} mode.");
         Console.WriteLine("The heroes are: ");
         foreach (Hero hero in heroes)
         {
-            Console.WriteLine($"{hero.GetName()} - current HP = {hero.GetHP()}");
+            Console.WriteLine($"-----{hero.GetName()}\n - HP = {hero.GetHP()}\n - REC = {hero.GetRec()}\n - ATK = {hero.GetAtk()}\n - DEF = {hero.GetDef()}\n - THW = {hero.GetPla()}");
         }
 
         Console.WriteLine("Press Enter key to continue..."); Console.ReadLine();
 
-        HeroTurn(heroes, villain);
+        Game(scenario, heroes, villain);
     }
 
     static void Game(Scenario scenario, List<Hero> heroes, Villain villain)
     {
-        CheckDeath(heroes);
+        bool endGame = false;
+        bool villainIsDead = false;
 
-        if (!heroes.Any())
+        while (!endGame)
         {
-            
+            CheckHDeath(heroes);
+            villainIsDead = CheckVDeath(villain);
+
+            if (!heroes.Any() || villainIsDead)
+            {
+                endGame = true;
+            }
+
+            else
+            {
+                HeroTurn(heroes, villain);
+                villainIsDead = CheckVDeath(villain);
+                if (villainIsDead)
+                {
+                    endGame = true;
+                }
+                else {VillainTurn(villain);}
+            }
         }
+
+        Console.WriteLine("The game is finished.");
+        Console.Write("Press Enter key to continue... ");
+        Console.ReadLine();
     }
 
     static List<Hero> HeroSelector(int heroCount)
@@ -282,7 +305,7 @@ class Program
         return villain;
     }
 
-    static List<Hero> CheckDeath(List<Hero> heroes)
+    static List<Hero> CheckHDeath(List<Hero> heroes)
     {
         foreach (Hero hero in heroes)
         {
@@ -294,6 +317,19 @@ class Program
 
         return heroes;
     }
+
+    static bool CheckVDeath (Villain villain)
+    {
+        bool isDead = false;
+
+        if (villain.GetHP() < 1)
+        {
+            isDead = true;
+        }
+
+        return isDead;
+    }
+
     static void Countdown(int start)
     {
         Console.CursorVisible = false;
