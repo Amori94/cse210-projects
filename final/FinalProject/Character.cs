@@ -1,9 +1,9 @@
 public abstract class Character
 {
     protected string _name;
-    int _hP;
-    int _pla;
-    int _atk;
+    protected int _hP;
+    protected int _pla;
+    protected int _atk;
     protected string _spe;
 
     public Character(string name, int hP, int pla, int atk, string spe)
@@ -48,5 +48,12 @@ public abstract class Character
     public virtual void Recovery(int points)
     {
         _hP = _hP + points;
+    }
+
+    public virtual string ExportData()
+    {
+        string data = "";
+        data = $"{_name},{_hP},{_atk},{_pla},{_spe}";
+        return data;
     }
 }

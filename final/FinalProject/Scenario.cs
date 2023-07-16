@@ -65,4 +65,11 @@ class Scenario
     {
         _currentThreat = _currentThreat + points;
     }
+
+    public string ExportData()
+    {
+        string data = "";
+        data = $"{_name},{_villain},{_difficulty},{_modules},{_threat},{_startThreat},{_roundThreat},{_currentThreat}";
+        return data;
+    }
 }

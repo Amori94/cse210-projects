@@ -73,6 +73,19 @@ class Program
         return menu.SimpleMenu();
     }
 
+    static void SaveGame(Scenario scenario, Villain villain, List<Hero> heroes)
+    {
+        
+        Console.WriteLine("Your game was saved");
+
+        //prompt quit
+        Console.Write("Would you like to Quit the program?(y/n) ");
+        string quitGame = Console.ReadLine();
+        if (quitGame == "y")
+        {
+            Environment.Exit(0);
+        }
+    }
     static void GameLoader(string fileName)
     {
         Console.Clear();
@@ -136,6 +149,14 @@ class Program
                     endGame = true;
                 }
                 else {VillainTurn(villain, heroes, scenario);}
+            }
+
+            Console.Clear();
+            Console.Write("Save Game now?(y/n) ");
+            string save = Console.ReadLine();
+            if (save == "y")
+            {
+                SaveGame(scenario, villain, heroes);
             }
         }
 

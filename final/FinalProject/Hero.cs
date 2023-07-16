@@ -65,4 +65,11 @@ class Hero : Character
     {
         return _def;
     }
+
+    public override string ExportData()
+    {
+        string data = "";
+        data = $"{_name},{_hP},{_atk},{_pla},{_spe},{_def},{_nameAlter},{_rec},{_handSize},{_altHandSize},{_alterSpe},{_isHero}";
+        return data;
+    }
 }
