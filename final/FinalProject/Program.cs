@@ -142,7 +142,7 @@ class Program
     static void InitiateSavedGame(string fileName)
     {
         //load file to string[]
-        string[] lines = System.IO.File.ReadAllLines(fileName);
+        string[] lines = System.IO.File.ReadAllLines($"Saved Files\\{fileName}");
 
         //initiate scenario and load
         Scenario scenario = new Scenario();
@@ -153,7 +153,7 @@ class Program
         villain.Loader(lines[1]);
 
         //load heroes
-        int lineCount = File.ReadLines(fileName).Count() - 1;
+        int lineCount = File.ReadLines($"Saved Files\\{fileName}").Count();
         List<Hero> heroes = new List<Hero>();
 
         for (int i = 2; i < lineCount; i++)
