@@ -75,7 +75,22 @@ class Program
 
     static void SaveGame(Scenario scenario, Villain villain, List<Hero> heroes)
     {
+        Console.Write("How would you like to name your file?");
+        string fileName = $"Saved Files\\{Console.ReadLine()}.txt";
         
+        using (StreamWriter outputFile = new StreamWriter(fileName))
+        {
+            outputFile.WriteLine(scenario.ExportData());
+            outputFile.WriteLine(villain.ExportData());
+            foreach (Hero hero in heroes)
+            {
+                outputFile.WriteLine(hero.ExportData());
+            }
+        }
+
+        Console.Write("Saving... ");
+        Countdown(3);
+        Console.Clear();
         Console.WriteLine("Your game was saved");
 
         //prompt quit
@@ -86,6 +101,7 @@ class Program
             Environment.Exit(0);
         }
     }
+   
     static void GameLoader(string fileName)
     {
         Console.Clear();
@@ -152,12 +168,6 @@ class Program
             }
 
             Console.Clear();
-            Console.Write("Save Game now?(y/n) ");
-            string save = Console.ReadLine();
-            if (save == "y")
-            {
-                SaveGame(scenario, villain, heroes);
-            }
         }
 
         Console.WriteLine("The game is finished.");
@@ -240,7 +250,7 @@ class Program
             while (input != "End Turn")
             {
                 List<string> turnMenu = new List<string>
-                {"Check Turn Options", "Recover Health", "Change to Hero", "End Turn"};
+                {"Check Turn Options", "Recover Health", "Change to Hero", "End Turn", "Save Game"};
                 if (hero.IsHero())
                 {
                     turnMenu.Insert(1, $"Attack {villain.GetName()} (current HP: {villain.GetHP()})");
@@ -279,6 +289,11 @@ class Program
                 {
                     hero.Change();
                 }
+
+                else if (input == "Save Game")
+                {
+                    SaveGame(scenario, villain, heroes);
+                }
             }
         }
 
@@ -287,7 +302,7 @@ class Program
         while (userIn != "End Turn")
         {
             List<string> turnMenu = new List<string>
-            {"Update Hero Health", "Update Villain Health", "Update Main Scheme Threat", "End Turn"};
+            {"Update Hero Health", "Update Villain Health", "Update Main Scheme Threat", "End Turn", "Save Game"};
 
             string menuHeading = $"Update Manually any card effects... ";
 
@@ -335,6 +350,11 @@ class Program
                 int points = int.Parse(Console.ReadLine());
                 scenario.Plan(points);
                 Console.Write($"Main Scheme current Threat = {scenario.GetThreat()}/{scenario.GetEndThreat()}\n\n Press Enter to continue... "); Console.ReadLine();
+            }
+
+            else if (userIn == "Save Game")
+            {
+                SaveGame(scenario, villain, heroes);
             }
         }
 
@@ -397,7 +417,7 @@ class Program
         while (input != "End Turn")
         {
             List<string> turnMenu = new List<string>
-            {"Update Hero Health", "Update Villain Health", "Update Main Scheme Threat", "End Turn"};
+            {"Update Hero Health", "Update Villain Health", "Update Main Scheme Threat", "End Turn", "Save Game"};
 
             string menuHeading = $"Update Manually any card effects... ";
 
@@ -445,6 +465,11 @@ class Program
                 int points = int.Parse(Console.ReadLine());
                 scenario.Plan(points);
                 Console.Write($"Main Scheme current Threat = {scenario.GetThreat()}/{scenario.GetEndThreat()}\n\n Press Enter to continue... "); Console.ReadLine();
+            }
+
+            else if (input == "Save Game")
+            {
+                SaveGame(scenario, villain, heroes);
             }
         }
 

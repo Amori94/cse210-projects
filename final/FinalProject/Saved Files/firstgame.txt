@@ -1,0 +1,5 @@
+The Break-In!,Rhino,Standard,Bomb Scare,7,0,1,0
+Rhino,3,2,1,None.
+Iron Man,9,1,2,Receive +1 hand size for each Technology you control (max 7).,1,Tony Stark,3,1,6,Look at the next 3 cards from the top of the deck - add 1 to your hand and discard the others.,True
+She-Hulk,15,3,1,When you change to this identity deal 2 HP to an enemy.,2,Jennifer Walters,5,4,6,Whenever a plan will grow remove 1 from that plan.,True
+Spider-Man,10,2,1,When the Villain attacks you steal a card.,3,Peter Parker,3,5,6,Generate 1 mental resource per round.,True
