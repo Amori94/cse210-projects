@@ -50,4 +50,19 @@ class Scenario
     {
         return _threat;
     }
+
+    public int GetRoundThreat()
+    {
+        return _roundThreat;
+    }
+
+    public void Interrupt(int points)
+    {
+        _currentThreat = _currentThreat - points;
+    }
+
+    public void Plan(int points)
+    {
+        _currentThreat = _currentThreat + points;
+    }
 }

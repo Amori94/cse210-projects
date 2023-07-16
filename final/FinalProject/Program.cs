@@ -114,30 +114,44 @@ class Program
     {
         bool endGame = false;
         bool villainIsDead = false;
+        bool scenarioEnd = false;
 
         while (!endGame)
         {
             CheckHDeath(heroes);
             villainIsDead = CheckVDeath(villain);
+            scenarioEnd = CheckEnd(scenario);
 
-            if (!heroes.Any() || villainIsDead)
+            if (!heroes.Any() || villainIsDead || scenarioEnd)
             {
                 endGame = true;
             }
 
             else
             {
-                HeroTurn(heroes, villain);
+                HeroTurn(heroes, villain, scenario);
                 villainIsDead = CheckVDeath(villain);
                 if (villainIsDead)
                 {
                     endGame = true;
                 }
-                else {VillainTurn(villain);}
+                else {VillainTurn(villain, heroes, scenario);}
             }
         }
 
         Console.WriteLine("The game is finished.");
+        if (villainIsDead)
+        {
+            Console.WriteLine($"{villain.GetName()} has been defeated! The heroes have triumphed this time!");
+            Console.WriteLine("You won!");
+        }
+        else if (scenarioEnd)
+        {
+            Console.WriteLine($"The Main Scheme has been completed! {villain.GetName()} has won this time!");
+            Console.WriteLine("You lost!");
+        }
+        else {Console.WriteLine($"All the heroes have lost, {villain.GetName()} has won this time!");Console.WriteLine("You lost!");}
+
         Console.Write("Press Enter key to continue... ");
         Console.ReadLine();
     }
@@ -196,7 +210,7 @@ class Program
         return heroes;
     }
 
-    static void HeroTurn(List<Hero> heroes, Villain villain)
+    static void HeroTurn(List<Hero> heroes, Villain villain, Scenario scenario)
     {
         foreach (Hero hero in heroes)
         {
@@ -209,7 +223,7 @@ class Program
                 if (hero.IsHero())
                 {
                     turnMenu.Insert(1, $"Attack {villain.GetName()} (current HP: {villain.GetHP()})");
-                    turnMenu.Insert(1, "Thwart Main Scheme");
+                    turnMenu.Insert(1, $"Interrupt Main Scheme (current Threat: {scenario.GetThreat()}) of {scenario.GetEndThreat()}");
                     turnMenu[4] = "Change to Alter-Ego";
                 }
 
@@ -225,10 +239,21 @@ class Program
                     Console.Write("Press Enter key to continue... "); Console.ReadLine();
                 }
 
+                else if (input == "Recover Health")
+                {
+                    hero.Recovery(hero.GetRec());
+                }
+
                 else if (input == $"Attack {villain.GetName()} (current HP: {villain.GetHP()})")
                 {
                     villain.Damage(hero.GetAtk());
                 }
+
+                else if (input == "Interrupt Main Scheme")
+                {
+                    scenario.Interrupt(hero.GetPla());
+                }
+
                 else if (input == "Change to Hero" || input == "Change to Alter-Ego")
                 {
                     hero.Change();
@@ -236,14 +261,173 @@ class Program
             }
         }
 
+        string userIn = "";
+
+        while (userIn != "End Turn")
+        {
+            List<string> turnMenu = new List<string>
+            {"Update Hero Health", "Update Villain Health", "Update Main Scheme Threat", "End Turn"};
+
+            string menuHeading = $"Update Manually any card effects... ";
+
+            Menus menu = new Menus(menuHeading, turnMenu);
+            userIn = menu.SimpleMenu();
+
+            if (userIn == "Update Hero Health")
+            {
+                foreach (Hero hero in heroes)
+                {
+                    Console.WriteLine($"{hero.GetName()} current Health = {hero.GetHP()}");
+                    Console.Write($"How much more damage did {hero.GetName()} receive? ");
+                    int points = int.Parse(Console.ReadLine());
+                    hero.Damage(points);
+                    Console.Write($"{hero.GetName()} current HP = {hero.GetHP()}\n\n Press enter to continue... "); Console.ReadLine();
+                }
+            }
+
+            else if (userIn == "Update Villain Health")
+            {
+                Console.WriteLine($"{villain.GetName()} current Health = {villain.GetHP()}");
+
+                Console.Write($"Did {villain.GetName()} recover (1) or lose health (2)");
+                string recOrDam = Console.ReadLine();
+                if (recOrDam == "1")
+                {
+                    Console.Write($"How much health did {villain.GetName()} recover? ");
+                    int points = int.Parse(Console.ReadLine());
+                    villain.Recovery(points);
+                }
+                else
+                {
+                    Console.Write($"How much health did {villain.GetName()} lose? ");
+                    int points = int.Parse(Console.ReadLine());
+                    villain.Damage(points);
+                }
+
+                Console.Write($"{villain.GetName()} current HP = {villain.GetHP()}\n\n Press enter to continue... "); Console.ReadLine();
+            }
+
+            else if (userIn == "Update Main Scheme Threat")
+            {                    
+                Console.WriteLine($"Main Scheme current Threat = {scenario.GetThreat()}/{scenario.GetEndThreat()}\n\n Press Enter to continue... ");
+                Console.Write($"How much threat did {villain.GetName()} add? ");
+                int points = int.Parse(Console.ReadLine());
+                scenario.Plan(points);
+                Console.Write($"Main Scheme current Threat = {scenario.GetThreat()}/{scenario.GetEndThreat()}\n\n Press Enter to continue... "); Console.ReadLine();
+            }
+        }
+
     }
 
-    static void VillainTurn(Villain name)
+    static void VillainTurn(Villain villain, List<Hero> heroes, Scenario scenario)
     {
-        List<string> turnMenu = new List<string>
-        {"Check Turn Options", "Change HP", "End Turn"};
-        Menus menu = new Menus($"It is {name.GetName()}'s turn", turnMenu);
-        menu.displayMenu();
+        string name = villain.GetName();
+        string mainScheme = scenario.GetName();
+        int threatRise = scenario.GetRoundThreat();
+        int threat = scenario.GetThreat();
+        int atk = villain.GetAtk();
+        int pla = villain.GetPla();
+
+        //Place threat on main scheme
+        Console.Clear();
+        Console.WriteLine($"It is {name}'s turn!!!\n Current HP = {villain.GetHP()}\n Main Scheme Current Threat = {scenario.GetThreat()}/{scenario.GetEndThreat()}");
+        Console.WriteLine($"The main scheme {mainScheme} rises {threatRise} points");
+        scenario.Plan(threatRise);
+        Console.Write("Press Enter to Continue..."); Console.ReadLine();
+
+        //Villain activates agains each hero/alterego
+        foreach (Hero hero in heroes)
+        {
+            Console.Clear();
+            Console.WriteLine($"It is {name}'s turn!!!\n Current HP = {villain.GetHP()}\n Main Scheme Current Threat = {scenario.GetThreat()}/{scenario.GetEndThreat()}\n\n");
+
+            if (hero.IsHero())
+            {
+                Console.WriteLine($"{name} attacks {hero.GetName()} with a base of {atk}.\n Reveal a card from the encounter deck.\n Add any extra damage");
+                Console.Write($"How much damage did {hero.GetName()} receive? ");
+                int points = int.Parse(Console.ReadLine());
+                hero.Damage(points);
+                Console.Write($"{hero.GetName()} current HP = {hero.GetHP()}\n\n Press enter to continue... "); Console.ReadLine();
+            }
+            else 
+            {
+                Console.WriteLine($"While {hero.GetName()} recovers, {name} plans with a base of {pla}.\n Reveal a card from the encounter deck.\n Add any extra plan");
+                Console.Write($"How much threat did {name} add to the Main Scheme? ");
+                int points = int.Parse(Console.ReadLine());
+                scenario.Plan(points);
+                Console.Write($"Main Scheme current Threat = {scenario.GetThreat()}/{scenario.GetEndThreat()}\n\n Press Enter to continue... "); Console.ReadLine();
+            }
+        }
+
+        //Follow instructions
+        Console.Clear();
+        Console.WriteLine($"It is {name}'s turn!!!\n Current HP = {villain.GetHP()}\n Main Scheme Current Threat = {scenario.GetThreat()}/{scenario.GetEndThreat()}");
+        Console.WriteLine("Deal 1 card from the encounter deck to each player.");
+        Console.Write("Press Enter to Continue..."); Console.ReadLine();
+        Console.WriteLine("Reveal each encounter card and play its effect.");
+        Console.Write("Press Enter to Continue..."); Console.ReadLine();
+
+        //Update stats manually
+        string input = "";
+
+        Console.Clear();
+        Console.WriteLine($"It is {name}'s turn!!!\n Current HP = {villain.GetHP()}\n Main Scheme Current Threat = {scenario.GetThreat()}/{scenario.GetEndThreat()}");
+
+        while (input != "End Turn")
+        {
+            List<string> turnMenu = new List<string>
+            {"Update Hero Health", "Update Villain Health", "Update Main Scheme Threat", "End Turn"};
+
+            string menuHeading = $"Update Manually any card effects... ";
+
+            Menus menu = new Menus(menuHeading, turnMenu);
+            input = menu.SimpleMenu();
+
+            if (input == "Update Hero Health")
+            {
+                foreach (Hero hero in heroes)
+                {
+                    Console.WriteLine($"{hero.GetName()} current Health = {hero.GetHP()}");
+                    Console.Write($"How much more damage did {hero.GetName()} receive? ");
+                    int points = int.Parse(Console.ReadLine());
+                    hero.Damage(points);
+                    Console.Write($"{hero.GetName()} current HP = {hero.GetHP()}\n\n Press enter to continue... "); Console.ReadLine();
+                }
+            }
+
+            else if (input == "Update Villain Health")
+            {
+                Console.WriteLine($"{name} current Health = {villain.GetHP()}");
+
+                Console.Write($"Did {name} recover (1) or lose health (2)");
+                string recOrDam = Console.ReadLine();
+                if (recOrDam == "1")
+                {
+                    Console.Write($"How much health did {name} recover? ");
+                    int points = int.Parse(Console.ReadLine());
+                    villain.Recovery(points);
+                }
+                else
+                {
+                    Console.Write($"How much health did {name} lose? ");
+                    int points = int.Parse(Console.ReadLine());
+                    villain.Damage(points);
+                }
+
+                Console.Write($"{name} current HP = {villain.GetHP()}\n\n Press enter to continue... "); Console.ReadLine();
+            }
+
+            else if (input == "Update Main Scheme Threat")
+            {                    
+                Console.WriteLine($"Main Scheme current Threat = {scenario.GetThreat()}/{scenario.GetEndThreat()}\n\n Press Enter to continue... ");
+                Console.Write($"How much threat did {name} add? ");
+                int points = int.Parse(Console.ReadLine());
+                scenario.Plan(points);
+                Console.Write($"Main Scheme current Threat = {scenario.GetThreat()}/{scenario.GetEndThreat()}\n\n Press Enter to continue... "); Console.ReadLine();
+            }
+        }
+
+        Console.WriteLine($"");
     }
 
     static Scenario ScenarioSelector()
@@ -330,6 +514,18 @@ class Program
         return isDead;
     }
 
+    static bool CheckEnd(Scenario scenario)
+    {
+        bool end = false;
+
+        if (scenario.GetThreat() > (scenario.GetEndThreat() - 1))
+        {
+            end = true;
+        }
+
+        return end;
+    }
+   
     static void Countdown(int start)
     {
         Console.CursorVisible = false;
