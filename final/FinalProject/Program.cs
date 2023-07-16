@@ -7,6 +7,8 @@ class Program
     {
         string input = "";
         bool loaded = false;
+        string fileName = "";
+
         Console.WriteLine("                 ___          ____    \n"+
         "|\\    /|   /\\   |   |\\      /|    |   \n"+
         "| \\  / |  /  \\  |___| \\    / |___ |   \n"+
@@ -26,17 +28,16 @@ class Program
             if (input == "New Game")
             {
                 InitiateNewGame();
-                
             }
 
             else if (input == "Continue Game")
             {
-
+                InitiateSavedGame(fileName);
             }
 
             else if (input == "Load Game")
             {
-                GameLoader(LoadGame());
+                fileName = LoadGame();
                 loaded = true;
             }
         }
@@ -70,7 +71,13 @@ class Program
 
         Menus menu = new Menus(path, fileNames);
 
-        return menu.SimpleMenu();
+        string fileName = menu.SimpleMenu();
+
+        Console.Clear();
+        Console.Write($"{fileName} has been loaded correctly.\n Press Enter to continue... ");
+        Console.ReadLine();
+
+        return fileName;
     }
 
     static void SaveGame(Scenario scenario, Villain villain, List<Hero> heroes)
@@ -101,13 +108,6 @@ class Program
             Environment.Exit(0);
         }
     }
-   
-    static void GameLoader(string fileName)
-    {
-        Console.Clear();
-        Console.Write($"{fileName} has been loaded correctly.\n Press Enter to continue... ");
-        Console.ReadLine();
-    }
 
     static void InitiateNewGame()
     {
@@ -137,6 +137,11 @@ class Program
         Console.WriteLine("Press Enter key to continue..."); Console.ReadLine();
 
         Game(scenario, heroes, villain);
+    }
+
+    static void InitiateSavedGame(string fileName)
+    {
+
     }
 
     static void Game(Scenario scenario, List<Hero> heroes, Villain villain)
